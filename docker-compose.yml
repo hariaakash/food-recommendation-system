@@ -64,6 +64,7 @@ services:
             NODE_ENV: development
             AMQP_URI: amqp://rabbitmq
             MONGODB_HOST: mongodb://mongodb
+            MONGODB_DB: food-test
         volumes:
             - ./services/user/src:/app/src
         restart: always

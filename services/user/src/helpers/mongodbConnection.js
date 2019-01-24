@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const host = process.env.MONGODB_HOST || 'mongodb://localhost';
 const port = process.env.MONGODB_PORT || 27017;
-const db = process.env.MONGODB_DB || 'opdp-test';
+const db = process.env.MONGODB_DB || 'food-test';
 
 const dbURI = `${host}:${port}/${db}`;
 

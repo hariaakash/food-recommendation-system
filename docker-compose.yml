@@ -1,0 +1,113 @@
+version: '3.5'
+
+networks:
+
+    proxy:
+        name: proxy
+    micros:
+        name: micros
+    db:
+        name: db
+
+services:
+
+    api:
+        build:
+            context: ./services/api
+            args:
+                NODE_ENV: development
+        image: food_api:dev
+        command: npm run dev
+        environment:
+            NODE_ENV: development
+            AMQP_URI: amqp://rabbitmq
+            API_PORT: 3000
+        volumes:
+            - ./services/api/src:/app/src
+        labels:
+            - "traefik.docker.network=proxy"
+            - "traefik.backend=api.local"
+            - "traefik.frontend.rule=Host:api.local"
+            - "traefik.port=3000"
+            - "traefik.enable=true"
+        restart: always
+        networks:
+            - micros
+            - proxy
+
+    orchestrator:
+        build:
+            context: ./services/orchestrator
+            args:
+                NODE_ENV: development
+        image: food_orchestrator:dev
+        command: npm run dev
+        environment:
+            NODE_ENV: development
+            AMQP_URI: amqp://rabbitmq
+        volumes:
+            - ./services/orchestrator/src:/app/src
+        restart: always
+        depends_on:
+            - rabbitmq
+        networks:
+            - micros
+
+    user:
+        build:
+            context: ./services/user
+            args:
+                NODE_ENV: development
+        image: food_user:dev
+        command: npm run dev
+        environment:
+            NODE_ENV: development
+            AMQP_URI: amqp://rabbitmq
+            MONGODB_HOST: mongodb://mongodb
+        volumes:
+            - ./services/user/src:/app/src
+        restart: always
+        depends_on:
+            - rabbitmq
+            - mongodb
+        networks:
+            - micros
+            - db
+
+    mongodb:
+        image: mvertes/alpine-mongo
+        volumes:
+            - ./data/mongodb:/data/db
+        networks:
+            - db
+    
+    rabbitmq:
+        image: rabbitmq:3-management
+        hostname: rabbitmq
+        volumes:
+            - ./data/rabbitmq:/var/lib/rabbitmq/mnesia/rabbit@rabbitmq
+        labels:
+            - "traefik.docker.network=proxy"
+            - "traefik.backend=rabbitmq.local"
+            - "traefik.frontend.rule=Host:rabbitmq.local"
+            - "traefik.port=15672"
+            - "traefik.enable=true"
+        restart: always
+        networks:
+            - micros
+            - proxy
+
+    traefik:
+        image: traefik
+        ports:
+        - 80:80
+        - 443:443
+        - 8080:8080
+        volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - ./config/traefik/traefik-dev.toml:/etc/traefik/traefik.toml
+        - ./config/traefik/traefik.crt:/etc/traefik/traefik.crt
+        - ./config/traefik/traefik.key:/etc/traefik/traefik.key
+        restart: always
+        networks:
+            - proxy

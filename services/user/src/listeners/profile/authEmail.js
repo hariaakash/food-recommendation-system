@@ -16,7 +16,7 @@ const checkPassword = ({ user, password }) =>
 						status: 200,
 						data: {
 							token: jwt.sign({ email: user.email, _id: user._id }, jwtSecret, {
-								expiresIn: '1m',
+								expiresIn: '1d',
 							}),
 							msg: 'Successfully authenticated using email.',
 						},

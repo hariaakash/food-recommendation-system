@@ -1,7 +1,7 @@
-const profile = require('./profile/');
+const restaurant = require('./restaurant/');
 
 const tasks = (ch) => {
-	profile(ch);
+	restaurant(ch);
 };
 
 module.exports = tasks;

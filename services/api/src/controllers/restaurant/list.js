@@ -4,7 +4,7 @@ const { rpcSend } = require('../../helpers/amqp-wrapper');
 
 const schema = Joi.object().keys({
 	token: Joi.string()
-		.regex(/^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/)
+		.regex(/^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/, 'Authentication Token')
 		.required(),
 });
 
@@ -14,7 +14,7 @@ const request = (req, res) => {
 		.then((vData) => {
 			rpcSend({
 				ch: req.ch,
-				queue: 'orchestrator_user:main_api',
+				queue: 'orchestrator_restaurant:list_api',
 				data: vData,
 			}).then(({ status, data }) => res.status(status).json(data));
 		})

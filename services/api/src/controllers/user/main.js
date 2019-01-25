@@ -3,14 +3,14 @@ const Joi = require('joi');
 const { rpcSend } = require('../../helpers/amqp-wrapper');
 
 const schema = Joi.object().keys({
-	authKey: Joi.string()
-		.length(21)
+	token: Joi.string()
+		.regex(/^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/)
 		.required(),
 });
 
 const request = (req, res) => {
 	schema
-		.validate(req.query, { abortEarly: false })
+		.validate({ token: req.headers['x-auth-token'] }, { abortEarly: false })
 		.then((vData) => {
 			rpcSend({
 				ch: req.ch,

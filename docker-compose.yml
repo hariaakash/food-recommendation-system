@@ -65,6 +65,7 @@ services:
             AMQP_URI: amqp://rabbitmq
             MONGODB_HOST: mongodb://mongodb
             MONGODB_DB: food-test
+            JWT_SECRET: JWT_API_SECRET
         volumes:
             - ./services/user/src:/app/src
         restart: always

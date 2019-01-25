@@ -1,7 +1,7 @@
-// const listener1 = require('./listener1/');
+const profile = require('./profile/');
 
 const tasks = (ch) => {
-	// listener1(ch);
+	profile(ch);
 };
 
 module.exports = tasks;

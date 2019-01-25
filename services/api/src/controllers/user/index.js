@@ -1,7 +1,11 @@
-// const create = require('./create');
+const main = require('./main');
+const create = require('./create');
+const auth = require('./auth');
 
 const methods = {
-	// create,
+	main,
+	create,
+	auth,
 };
 
 module.exports = methods;

@@ -1,7 +1,7 @@
-// const listener1 = require('./listener1/');
+const user = require('./user/');
 
 const tasks = (ch) => {
-	// listener1(ch);
+	user(ch);
 };
 
 module.exports = tasks;

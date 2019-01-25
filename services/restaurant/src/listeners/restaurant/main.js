@@ -1,5 +1,4 @@
 const Restaurant = require('../../schemas/restaurant');
-const Dish = require('../../schemas/dish');
 
 const { rpcConsume } = require('../../helpers/amqp-wrapper');
 

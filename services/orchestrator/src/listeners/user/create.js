@@ -37,7 +37,7 @@ const process = ({ email, password }, ch) =>
 				} else
 					resolve({
 						status: 200,
-						data: { msg: 'User created successfully, check mail for verification' },
+						data: { msg: 'User created successfully.' },
 					});
 			}
 		);
